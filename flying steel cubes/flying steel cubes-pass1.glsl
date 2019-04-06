@@ -5,15 +5,20 @@
 // Description: Cubes got light, texture and translation.
 //    Kill fov morphing if you want less psychedelic.
 
+layout (location = 0) out vec4 fragColor;
 uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform float     iGlobalTime;           // shader playback time (in seconds)
 uniform float     iChannelTime[4];       // channel playback time (in seconds)
 uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
 uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
-uniform sampler2D iChannel0;             // input channel. XX = 2D/Cube
-uniform sampler2D iChannel1;             // input channel. XX = 2D/Cube
 uniform vec4      iDate;                 // (year, month, day, time in secs)
 uniform float     iSampleRate;           // sound sample rate (i.e., 44100)
+#define iChannel0 sTD2DInputs[0]
+#define iChannel1 sTD2DInputs[1]
+#define iChannel2 sTD2DInputs[2]
+#define iChannel3 sTD2DInputs[3]
+#define iTime iGlobalTime
+//if it's cube texture, then replace sTD2DInputs with sTDCubeInputs
 
 #define FOV_MORPH 1
 
@@ -119,10 +124,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 		
 }
 
-void main (void)
+void main ()
 {
   vec4 color = vec4 (0.0, 0.0, 0.0, 1.0);
   mainImage (color, gl_FragCoord.xy);
   color.w = 1.0;
-  gl_FragColor = color;
+  fragColor = color;
 }
